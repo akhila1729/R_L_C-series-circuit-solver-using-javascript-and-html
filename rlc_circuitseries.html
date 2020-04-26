@@ -1,0 +1,76 @@
+<html><head>
+	<!-- Load plotly.js into the DOM -->
+	
+	<script Language= "JavaScript" src="https://cdn.plot.ly/plotly-latest.min.js">
+	</script>
+	<script Language= "JavaScript">
+		function rlc_circuit()
+		{
+			var V= Number(document.black.txtNum3.value);
+			var r= Number(document.black.txtNum.value);
+			var c= Number(document.black.txtNum2.value);
+			var l= Number(document.black.txtNum4.value);
+			var i=new Array(10000000);
+      var t=new Array(10000000);
+			var h=1/100000.0;
+			var v1=new Array(10000000);
+			var v2=new Array(10000000);
+			var i=new Array(10000000);
+			var n;
+			var didt=new Array(10000000);
+			var dv1dt=new Array(10000000);
+			var dv2dt=new Array(10000000);
+			i[0]=0;
+			didt[0]=V/l;
+			v1[0]=V;
+			v2[0]=V;
+			dv1dt[0]=-1*V*r/l;
+			dv2dt[0]=-1*V*r/l;
+      t[0]=0;
+      var t1=(100)*100000;
+      var t1=(10)*100000;
+			for(n=1;n<t1;n++)
+			{
+				i[n]=i[n-1]+h*didt[n-1];
+				v1[n]=v1[n-1]+dv1dt[n-1]*h;
+				v2[n]=v2[n-1]+dv2dt[n-1]*h;
+				didt[n]=v2[n]/l;
+				dv1dt[n]=-1*r*didt[n];
+				dv2dt[n]=dv1dt[n]-(i[n]/c);
+				t[n]=n*h;
+			}
+
+			var trace1 = {
+            x:t,y:i,
+            type: 'scatter'
+		};
+  
+		var data=[trace1];
+		var layout = {
+         title: 'R_L_C Circuit',
+         showlegend: false
+        };
+		Plotly.newPlot('myDiv', data, layout, {scrollZoom: true});
+		}
+	</script>
+	
+</head>
+
+<body>
+	 <form name="black">
+    <CENTER> Enter the value of resistence(in ohms)
+      <INPUT Type= "text" Name= "txtNum"> <BR><BR> 
+        Enter the value of capacitance(in farads)
+      <INPUT Type= "text" Name= "txtNum2"> <BR><BR> 
+        Enter the value of input dc voltage (in volts)
+        <INPUT Type= "text" Name= "txtNum3"> <BR><BR> 
+        
+         Enter the value of inductance(in henry)
+        <INPUT Type= "text" Name= "txtNum4"> <BR><BR> 
+        <INPUT Type= "button" Value= "Ok" onClick= "rlc_circuit()">
+        </center> </form>
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+	
+</body>
+</html>
+
